@@ -1,15 +1,10 @@
-FROM php:8.2-cli
+FROM php:8.3-cli
 
-# Install system dependencies & essential PHP extensions
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    libsqlite3-dev \
-    libonig-dev \
-    libcurl4-openssl-dev \
-    && docker-php-ext-install pdo pdo_sqlite sockets zip mbstring bcmath \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Use official extension installer for bulletproof PHP 8.3 extension installation
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions pdo_sqlite sockets zip pcntl bcmath curl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -17,15 +12,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . /app
 
-# Install PHP dependencies safely (without artisan scripts during build)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Install PHP dependencies for Laravel 11/12
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 # Permissions
 RUN chmod -R 777 storage bootstrap/cache
 
 EXPOSE 10000
 
-# Entrypoint runtime commands
 CMD touch database/database.sqlite \
     && chmod -R 777 database \
     && php artisan package:discover --ansi \
