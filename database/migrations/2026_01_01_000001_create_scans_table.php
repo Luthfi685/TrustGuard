@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('scans', function (Blueprint $table) {
             $table->id();
+            $table->string('session_id')->nullable()->index();
             $table->text('url');
             $table->string('domain')->index();
             $table->string('scheme')->default('https');

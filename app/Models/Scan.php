@@ -10,6 +10,7 @@ class Scan extends Model
     use HasFactory;
 
     protected $fillable = [
+        'session_id',
         'url',
         'domain',
         'scheme',

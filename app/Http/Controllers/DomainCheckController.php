@@ -60,11 +60,14 @@ class DomainCheckController extends Controller
         $url = trim($request->input('url'));
 
         try {
+            $sessionId = Session::getId();
+
             // Jalankan analisis menyeluruh melalui Service (SSL, RDAP, Safe Browsing, SSRF Defense, Headers)
             $result = $this->checkerService->analyze($url);
 
-            // Simpan hasil ke database MySQL
+            // Simpan hasil ke database dengan mengikat session_id pengguna
             $scan = Scan::create([
+                'session_id' => $sessionId,
                 'url' => $result['raw_url'],
                 'domain' => $result['domain'],
                 'scheme' => $result['scheme'],
@@ -79,7 +82,6 @@ class DomainCheckController extends Controller
             ]);
 
             // Tambahkan Bonus Poin Keahlian Digital (+20 XP per Scan)
-            $sessionId = Session::getId();
             $progress = UserProgress::getForSession($sessionId);
             $progress->increment('points', 20);
             $progress->refresh(); // Refresh agar nilai points terbaru terbaca
@@ -131,26 +133,29 @@ class DomainCheckController extends Controller
      */
     public function dashboard()
     {
-        $totalScans = Scan::count();
-        $safeScans = Scan::where('status', 'safe')->count();
-        $warningScans = Scan::where('status', 'warning')->count();
-        $dangerScans = Scan::where('status', 'danger')->count();
+        $sessionId = Session::getId();
+        $userProgress = UserProgress::getForSession($sessionId);
+
+        // Filter riwayat scan khusus device / session pengguna yang sedang aktif
+        $userScansQuery = Scan::where('session_id', $sessionId);
+
+        $totalScans = (clone $userScansQuery)->count();
+        $safeScans = (clone $userScansQuery)->where('status', 'safe')->count();
+        $warningScans = (clone $userScansQuery)->where('status', 'warning')->count();
+        $dangerScans = (clone $userScansQuery)->where('status', 'danger')->count();
 
         $totalChecked = $totalScans;
         $safeCount = $safeScans;
         $warningCount = $warningScans;
         $dangerCount = $dangerScans;
 
-        $recentScans = Scan::latest()->paginate(10);
-        
-        $sessionId = Session::getId();
-        $userProgress = UserProgress::getForSession($sessionId);
+        $recentScans = (clone $userScansQuery)->latest()->paginate(10);
 
         // Kalkulasi persentase Digital Safety Level pengguna
         $safetyLevelPct = min(100, max(20, ($userProgress->level * 20)));
 
-        // Data grafik bulanan: jumlah scan per bulan di tahun berjalan (kompatibel MySQL & SQLite)
-        $scansThisYear = Scan::where('created_at', '>=', now()->startOfYear())->get(['created_at']);
+        // Data grafik bulanan: jumlah scan per bulan di tahun berjalan untuk pengguna ini
+        $scansThisYear = (clone $userScansQuery)->where('created_at', '>=', now()->startOfYear())->get(['created_at']);
         $monthlyRaw = [];
         foreach ($scansThisYear as $item) {
             if ($item->created_at) {
