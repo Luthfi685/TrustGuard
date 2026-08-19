@@ -149,14 +149,15 @@ class DomainCheckController extends Controller
         // Kalkulasi persentase Digital Safety Level pengguna
         $safetyLevelPct = min(100, max(20, ($userProgress->level * 20)));
 
-        // Data grafik bulanan: jumlah scan per bulan di tahun berjalan dari DB
-        $currentYear = now()->year;
-        $monthlyRaw = Scan::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $currentYear)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total', 'month')
-            ->toArray();
+        // Data grafik bulanan: jumlah scan per bulan di tahun berjalan (kompatibel MySQL & SQLite)
+        $scansThisYear = Scan::where('created_at', '>=', now()->startOfYear())->get(['created_at']);
+        $monthlyRaw = [];
+        foreach ($scansThisYear as $item) {
+            if ($item->created_at) {
+                $m = (int)$item->created_at->format('n');
+                $monthlyRaw[$m] = ($monthlyRaw[$m] ?? 0) + 1;
+            }
+        }
 
         $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $monthlyLabels = [];
