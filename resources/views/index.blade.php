@@ -83,53 +83,69 @@
         </span>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
 
-        <!-- Card 1: Total Scans -->
-        <div class="glass-card glass-card-hover rounded-3xl p-7 flex items-center gap-5">
-            <div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-200 text-brand-600 flex items-center justify-center shrink-0 shadow-sm">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        <!-- Card 1: Total Users Protected -->
+        <div class="glass-card glass-card-hover rounded-3xl p-6 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center shrink-0 shadow-sm">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
             </div>
             <div>
-                <div id="statTotal" data-target="{{ $totalChecked }}" class="text-3xl font-black text-navy-900 tracking-tight font-mono">
-                    {{ number_format($totalChecked) }}
+                <div id="statUsers" data-target="{{ $userCount }}" class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight font-mono">
+                    {{ number_format($userCount) }}
                 </div>
-                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-500 mt-1">Website Checked</div>
-                <div class="text-[11px] text-navy-400 font-medium">Pemindai real-time aktif</div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-600 mt-0.5">Pengguna Aktif</div>
+                <div class="text-[11px] text-navy-400 font-medium">Orang yang cek web</div>
             </div>
         </div>
 
-        <!-- Card 2: Trusted Sites -->
-        <div class="glass-card glass-card-hover rounded-3xl p-7 flex items-center gap-5">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0 shadow-sm">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Card 2: Total Scans -->
+        <div class="glass-card glass-card-hover rounded-3xl p-6 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-200 text-brand-600 flex items-center justify-center shrink-0 shadow-sm">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                </svg>
+            </div>
+            <div>
+                <div id="statTotal" data-target="{{ $totalChecked }}" class="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight font-mono">
+                    {{ number_format($totalChecked) }}
+                </div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-600 mt-0.5">Website Checked</div>
+                <div class="text-[11px] text-navy-400 font-medium">Total pemindaian link</div>
+            </div>
+        </div>
+
+        <!-- Card 3: Trusted Sites -->
+        <div class="glass-card glass-card-hover rounded-3xl p-6 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0 shadow-sm">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
             </div>
             <div>
-                <div id="statTrusted" data-target="{{ $trustedCount }}" class="text-3xl font-black text-emerald-600 tracking-tight font-mono">
+                <div id="statTrusted" data-target="{{ $trustedCount }}" class="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight font-mono">
                     {{ number_format($trustedCount) }}
                 </div>
-                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-500 mt-1">Trusted Domain</div>
-                <div class="text-[11px] text-navy-400 font-medium">Trust Score ≥ 80</div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-600 mt-0.5">Domain Aman</div>
+                <div class="text-[11px] text-navy-400 font-medium">Hasil Skor ≥ 80</div>
             </div>
         </div>
 
-        <!-- Card 3: Risk Detected -->
-        <div class="glass-card glass-card-hover rounded-3xl p-7 flex items-center gap-5">
-            <div class="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Card 4: Risk Detected -->
+        <div class="glass-card glass-card-hover rounded-3xl p-6 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                 </svg>
             </div>
             <div>
-                <div id="statRisk" data-target="{{ $riskCount }}" class="text-3xl font-black text-rose-600 tracking-tight font-mono">
+                <div id="statRisk" data-target="{{ $riskCount }}" class="text-2xl sm:text-3xl font-black text-rose-600 tracking-tight font-mono">
                     {{ number_format($riskCount) }}
                 </div>
-                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-500 mt-1">Risk Detected</div>
-                <div class="text-[11px] text-navy-400 font-medium">Indikasi Phishing/Befilter</div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-navy-600 mt-0.5">Risiko Dicegah</div>
+                <div class="text-[11px] text-navy-400 font-medium">Indikasi Phishing & Scam</div>
             </div>
         </div>
 
@@ -197,6 +213,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // 1. Number ticker animation on initial load
+    animateNumber('statUsers');
     animateNumber('statTotal');
     animateNumber('statTrusted');
     animateNumber('statRisk');
@@ -227,6 +244,7 @@ function fetchLiveStats() {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
+                updateStat('statUsers', data.userCount);
                 updateStat('statTotal', data.totalChecked);
                 updateStat('statTrusted', data.trustedCount);
                 updateStat('statRisk', data.riskCount);

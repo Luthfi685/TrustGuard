@@ -28,13 +28,19 @@ class DomainCheckController extends Controller
         $realSafeCount = Scan::where('status', 'safe')->count();
         $realRiskCount = Scan::whereIn('status', ['warning', 'danger'])->count();
 
+        // Hitung total orang/pengguna unik yang sudah melakukan pengecekan / interaksi
+        $userCount = max(
+            UserProgress::count(),
+            Scan::distinct('session_id')->whereNotNull('session_id')->count()
+        );
+
         $totalChecked = $realScansCount;
         $trustedCount = $realSafeCount;
         $riskCount = $realRiskCount;
 
         $recentScans = Scan::latest()->take(6)->get();
 
-        return view('index', compact('totalChecked', 'trustedCount', 'riskCount', 'recentScans'));
+        return view('index', compact('userCount', 'totalChecked', 'trustedCount', 'riskCount', 'recentScans'));
     }
 
     /**
@@ -206,12 +212,18 @@ class DomainCheckController extends Controller
         $realSafeCount = Scan::where('status', 'safe')->count();
         $realRiskCount = Scan::whereIn('status', ['warning', 'danger'])->count();
 
+        $userCount = max(
+            UserProgress::count(),
+            Scan::distinct('session_id')->whereNotNull('session_id')->count()
+        );
+
         $totalChecked = $realScansCount;
         $trustedCount = $realSafeCount;
         $riskCount = $realRiskCount;
 
         return response()->json([
             'success' => true,
+            'userCount' => $userCount,
             'totalChecked' => $totalChecked,
             'trustedCount' => $trustedCount,
             'riskCount' => $riskCount,
