@@ -125,9 +125,8 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="text-lg sm:text-xl font-extrabold tracking-tight text-navy-900 flex items-center gap-1.5">
+                        <span class="text-lg sm:text-xl font-extrabold tracking-tight text-navy-900">
                             Trust<span class="text-brand-600">Guard</span>
-                            <span class="inline-block w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
                         </span>
                         <span class="hidden sm:block text-[10px] uppercase font-bold tracking-widest text-navy-400 -mt-1">NextGen Web Security</span>
                     </div>
