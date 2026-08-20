@@ -4,26 +4,18 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative pt-8 sm:pt-14 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center space-y-6 max-w-4xl mx-auto">
-
-        <!-- AI Security Intelligence Pill Badge (No Competition Text) -->
-        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-brand-50 via-indigo-50 to-brand-50 border border-brand-200 text-brand-700 text-xs font-extrabold tracking-wide shadow-sm hover:scale-105 transition-all duration-300">
-            <span class="flex h-2 w-2 relative">
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"></span>
-            </span>
-            <span>AI-Powered Multi-Vector Web Threat Intelligence</span>
-        </div>
+<section class="relative pt-6 sm:pt-10 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center space-y-4 max-w-3xl mx-auto">
 
         <!-- Main Headline -->
-        <h1 class="text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-navy-900 leading-[1.15]">
-            Cek Validitas & Keamanan Link<br>
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-navy-900 leading-tight">
+            Cek Validitas & Keamanan Link <br class="hidden sm:inline">
             <span class="gradient-brand-text">Sebelum Anda Percaya.</span>
         </h1>
 
         <!-- Subtitle -->
-        <p class="text-base sm:text-xl text-navy-600 max-w-2xl mx-auto leading-relaxed font-medium">
-            Lindungi data pribadi dan transaksi Anda dari bahaya <strong>phishing, malware, dan website tiruan</strong>. Analisis sertifikat SSL, umur domain RDAP, dan protokol keamanan instan dalam hitungan detik.
+        <p class="text-sm sm:text-base text-navy-600 max-w-xl mx-auto leading-relaxed font-medium">
+            Lindungi data pribadi dan transaksi Anda dari bahaya <strong>phishing, malware, dan website tiruan</strong>. Analisis sertifikat SSL, umur domain RDAP, dan protokol keamanan instan.
         </p>
 
         <!-- Main Hero URL Search Bar & Real-time Scanner -->
