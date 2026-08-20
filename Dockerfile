@@ -15,14 +15,11 @@ COPY . /app
 # Install PHP dependencies for Laravel 11/12
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
-# Permissions
-RUN chmod -R 777 storage bootstrap/cache
+# Permissions & normalize line endings
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && \
+    chmod -R 777 storage bootstrap/cache && \
+    chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 10000
 
-CMD touch database/database.sqlite \
-    && chmod -R 777 database \
-    && php artisan package:discover --ansi \
-    && php artisan migrate --force \
-    && php artisan config:clear \
-    && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD ["/app/docker-entrypoint.sh"]
