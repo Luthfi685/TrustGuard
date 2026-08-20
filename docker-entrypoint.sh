@@ -8,6 +8,12 @@ mkdir -p storage/framework/cache/data storage/framework/sessions storage/framewo
 touch database/database.sqlite
 chmod -R 777 storage bootstrap/cache database
 
+# Pastikan variabel environment penting terdefinisi
+export APP_KEY="${APP_KEY:-base64:r3KtlzPeqEk4joYj2WidNqXGHySbBNLrV85QZe74ORs=}"
+export APP_ENV="${APP_ENV:-production}"
+export APP_DEBUG="${APP_DEBUG:-false}"
+export DB_CONNECTION="${DB_CONNECTION:-sqlite}"
+
 # Buat file .env jika belum ada dari .env.example
 if [ ! -f .env ]; then
     if [ -f .env.example ]; then
@@ -17,10 +23,9 @@ if [ ! -f .env ]; then
     fi
 fi
 
-# Jika APP_KEY belum ada, generate otomatis
-if [ -z "$APP_KEY" ]; then
-    echo "Generating new APP_KEY..."
-    php artisan key:generate --force || true
+# Tuliskan APP_KEY ke dalam file .env jika belum ada
+if ! grep -q "APP_KEY=base64:" .env; then
+    echo "APP_KEY=$APP_KEY" >> .env
 fi
 
 # Discover packages
