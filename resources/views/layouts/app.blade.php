@@ -316,7 +316,10 @@
                 </div>
             </div>
             <div class="border-t border-navy-200/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-navy-500 font-medium">
-                <p>&copy; 2026 TrustGuard. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <span class="font-extrabold text-navy-800">TrustGuard</span>
+                    <span class="text-navy-400">— NextGen Web Security Platform</span>
+                </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="font-semibold text-emerald-700">System Online & Protected</span>
@@ -332,8 +335,6 @@
                         </svg>
                     </div>
                     <span class="font-bold text-navy-700">TrustGuard</span>
-                    <span class="text-navy-300">•</span>
-                    <p>&copy; 2026 All rights reserved.</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
