@@ -139,10 +139,6 @@
                        class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 {{ request()->routeIs('home') ? 'bg-white text-brand-600 shadow-sm' : 'text-navy-600 hover:text-navy-900 hover:bg-white/60' }}">
                         Beranda
                     </a>
-                    <a href="{{ route('scan') }}"
-                       class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 {{ request()->routeIs('scan') ? 'bg-white text-brand-600 shadow-sm' : 'text-navy-600 hover:text-navy-900 hover:bg-white/60' }}">
-                        Pemindai URL
-                    </a>
                     <a href="{{ route('learn.index') }}"
                        class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 {{ request()->routeIs('learn.index') ? 'bg-white text-brand-600 shadow-sm' : 'text-navy-600 hover:text-navy-900 hover:bg-white/60' }}">
                         Akademi Keamanan
@@ -160,7 +156,8 @@
                 <!-- Desktop CTA + Mobile Hamburger -->
                 <div class="flex items-center gap-3">
                     <!-- Desktop CTA -->
-                    <a href="{{ route('scan') }}"
+                    <a href="{{ route('home') }}#scanner-box"
+                       onclick="if(window.location.pathname === '/' || window.location.pathname === '') { document.getElementById('urlInput')?.focus(); }"
                        class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/25 transition-all duration-300 hover:scale-[1.03]">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -168,7 +165,9 @@
                         Pindai URL
                     </a>
                     <!-- Mobile: Scan shortcut + Hamburger -->
-                    <a href="{{ route('scan') }}" class="md:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-brand-600 text-white shadow-md shadow-brand-500/25">
+                    <a href="{{ route('home') }}#scanner-box"
+                       onclick="if(window.location.pathname === '/' || window.location.pathname === '') { document.getElementById('urlInput')?.focus(); }"
+                       class="md:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-brand-600 text-white shadow-md shadow-brand-500/25">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
@@ -192,10 +191,6 @@
                 <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('home') ? 'bg-brand-50 text-brand-700 border border-brand-200' : 'text-navy-700 hover:bg-navy-100' }}">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                     Beranda
-                </a>
-                <a href="{{ route('scan') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('scan') ? 'bg-brand-50 text-brand-700 border border-brand-200' : 'text-navy-700 hover:bg-navy-100' }}">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Pemindai URL
                 </a>
                 <a href="{{ route('learn.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('learn.index') ? 'bg-brand-50 text-brand-700 border border-brand-200' : 'text-navy-700 hover:bg-navy-100' }}">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
@@ -240,28 +235,22 @@
 
     <!-- Mobile Bottom Navigation Bar -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-navy-200/80 shadow-[0_-4px_24px_-4px_rgba(15,23,42,0.08)]">
-        <div class="grid grid-cols-5 h-16">
+        <div class="grid grid-cols-4 h-16">
             <a href="{{ route('home') }}" class="flex flex-col items-center justify-center gap-1 {{ request()->routeIs('home') ? 'text-brand-600' : 'text-navy-400' }}">
                 <svg class="w-5 h-5" fill="{{ request()->routeIs('home') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span class="text-[9px] font-extrabold uppercase tracking-wide">Beranda</span>
-            </a>
-            <a href="{{ route('scan') }}" class="flex flex-col items-center justify-center gap-1 -mt-4 relative">
-                <div class="w-14 h-14 rounded-2xl bg-brand-600 text-white flex flex-col items-center justify-center shadow-lg shadow-brand-500/40 border-4 border-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <span class="text-[8px] font-extrabold tracking-wide leading-none mt-0.5">SCAN</span>
-                </div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wide">Beranda</span>
             </a>
             <a href="{{ route('learn.index') }}" class="flex flex-col items-center justify-center gap-1 {{ request()->routeIs('learn.index') ? 'text-brand-600' : 'text-navy-400' }}">
                 <svg class="w-5 h-5" fill="{{ request()->routeIs('learn.index') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                <span class="text-[9px] font-extrabold uppercase tracking-wide">Akademi</span>
+                <span class="text-[10px] font-extrabold uppercase tracking-wide">Akademi</span>
             </a>
             <a href="{{ route('report.index') }}" class="flex flex-col items-center justify-center gap-1 {{ request()->routeIs('report.index') ? 'text-rose-600' : 'text-navy-400' }}">
                 <svg class="w-5 h-5" fill="{{ request()->routeIs('report.index') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span class="text-[9px] font-extrabold uppercase tracking-wide">Lapor</span>
+                <span class="text-[10px] font-extrabold uppercase tracking-wide">Lapor</span>
             </a>
             <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-1 {{ request()->routeIs('dashboard') ? 'text-brand-600' : 'text-navy-400' }}">
                 <svg class="w-5 h-5" fill="{{ request()->routeIs('dashboard') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                <span class="text-[9px] font-extrabold uppercase tracking-wide">Dashboard</span>
+                <span class="text-[10px] font-extrabold uppercase tracking-wide">Dashboard</span>
             </a>
         </div>
     </nav>

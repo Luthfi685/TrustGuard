@@ -24,19 +24,19 @@
             Platform intelijen keamanan siber otomatis yang mengonversi SSL, statistik domain RDAP, dan analisis ancaman siber menjadi <strong>Trust Score (0–100)</strong> yang intuitif.
         </p>
 
-        <!-- Main Hero URL Search Bar -->
-        <div class="pt-6 max-w-2xl mx-auto">
-            <form action="{{ route('scan') }}" method="GET" class="relative group">
+        <!-- Main Hero URL Search Bar & Real-time Scanner -->
+        <div id="scanner-box" class="pt-6 max-w-2xl mx-auto text-left">
+            <form id="heroScanForm" action="{{ route('scan') }}" method="GET" class="relative group">
                 <div class="p-2 rounded-2xl bg-white border-2 border-navy-200 shadow-soft-xl group-hover:border-brand-500 transition-all duration-300 flex items-center gap-2">
                     <div class="pl-4 text-navy-400 group-hover:text-brand-600 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
-                    <input type="text" name="url" required
+                    <input type="text" id="urlInput" name="url" value="{{ request('url') }}" required
                            placeholder="Ketik atau tempel URL (cth: https://tokopedia.com)..."
                            class="w-full py-3.5 px-2 bg-transparent text-navy-900 placeholder-navy-400 font-semibold text-base focus:outline-none">
-                    <button type="submit"
+                    <button type="submit" id="heroSubmitBtn"
                             class="px-7 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-sm shadow-md shadow-brand-500/25 transition-all duration-300 hover:scale-[1.02] shrink-0 flex items-center gap-2">
                         <span>Analisis Sekarang</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,6 +45,42 @@
                     </button>
                 </div>
             </form>
+
+            <!-- Loading State Progress Card (Directly on Homepage) -->
+            <div id="loadingCard" class="hidden mt-6 glass-card rounded-3xl p-6 sm:p-8 shadow-soft-xl space-y-6">
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-brand-50 border border-brand-200 text-brand-800">
+                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                        <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 id="statusTitle" class="text-sm font-extrabold text-navy-900">Memeriksa URL...</h4>
+                        <p id="statusSub" class="text-xs text-navy-600 font-medium">Engine sedang melakukan analisis keamanan domain...</p>
+                    </div>
+                </div>
+
+                <!-- Steps checklist -->
+                <div class="space-y-3 text-xs font-semibold">
+                    <div id="step1" class="flex items-center gap-3 text-navy-400">
+                        <span class="w-5 h-5 rounded-full bg-navy-200 flex items-center justify-center text-[10px] font-bold">1</span>
+                        <span>Validasi Alamat URL & SSRF Defense</span>
+                    </div>
+                    <div id="step2" class="flex items-center gap-3 text-navy-400">
+                        <span class="w-5 h-5 rounded-full bg-navy-200 flex items-center justify-center text-[10px] font-bold">2</span>
+                        <span>Inspeksi Stream Sertifikat SSL/TLS</span>
+                    </div>
+                    <div id="step3" class="flex items-center gap-3 text-navy-400">
+                        <span class="w-5 h-5 rounded-full bg-navy-200 flex items-center justify-center text-[10px] font-bold">3</span>
+                        <span>Pemeriksaan Umur Domain RDAP & Rekam DNS</span>
+                    </div>
+                    <div id="step4" class="flex items-center gap-3 text-navy-400">
+                        <span class="w-5 h-5 rounded-full bg-navy-200 flex items-center justify-center text-[10px] font-bold">4</span>
+                        <span>Kalkulasi Trust Score (0–100)</span>
+                    </div>
+                </div>
+            </div>
 
             <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-4 text-xs font-semibold text-navy-500">
                 <span class="flex items-center gap-1.5">
@@ -220,7 +256,93 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Real-time Live Polling every 3.5 seconds
     setInterval(fetchLiveStats, 3500);
+
+    // 3. Scan URL Handler directly on homepage
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlQuery = urlParams.get('url');
+    if (urlQuery) {
+        startScan(urlQuery);
+    }
+
+    const form = document.getElementById('heroScanForm');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const urlVal = document.getElementById('urlInput').value.trim();
+            if (urlVal) {
+                startScan(urlVal);
+            }
+        });
+    }
 });
+
+function startScan(urlVal) {
+    const loadingCard = document.getElementById('loadingCard');
+    const submitBtn = document.getElementById('heroSubmitBtn');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusSub = document.getElementById('statusSub');
+
+    if (loadingCard) loadingCard.classList.remove('hidden');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
+    // Scroll smoothly to loading area
+    document.getElementById('scanner-box').scrollIntoView({ behavior: 'smooth' });
+
+    const steps = [
+        { id: 'step1', text: 'Validasi Alamat URL & SSRF Defense', sub: 'Memeriksa keabsahan format URL dan proteksi IP privat...' },
+        { id: 'step2', text: 'Inspeksi Stream Sertifikat SSL/TLS', sub: 'Menganalisis penerbit SSL dan tanggal kedaluwarsa...' },
+        { id: 'step3', text: 'Pemeriksaan Umur Domain RDAP & Rekam DNS', sub: 'Mengambil metadata registrasi domain dan IP server...' },
+        { id: 'step4', text: 'Kalkulasi Trust Score (0–100)', sub: 'Menghitung bobot skor keamanan...' }
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+        if (currentStep < steps.length) {
+            const stepObj = steps[currentStep];
+            if (statusTitle) statusTitle.textContent = stepObj.text;
+            if (statusSub) statusSub.textContent = stepObj.sub;
+
+            const el = document.getElementById(stepObj.id);
+            if (el) {
+                el.className = 'flex items-center gap-3 text-brand-600 font-bold';
+                const circle = el.querySelector('span');
+                if (circle) circle.className = 'w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px] font-bold';
+            }
+            currentStep++;
+        } else {
+            clearInterval(interval);
+            executeFetchScan(urlVal);
+        }
+    }, 600);
+}
+
+function executeFetchScan(urlVal) {
+    fetch('{{ route("api.scan") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ url: urlVal })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.redirect_url) {
+            window.location.href = data.redirect_url;
+        } else {
+            alert(data.error || 'Terjadi kesalahan saat memindai domain.');
+            location.reload();
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Gagal terhubung ke server pemindai.');
+        location.reload();
+    });
+}
 
 function animateNumber(elementId) {
     const el = document.getElementById(elementId);

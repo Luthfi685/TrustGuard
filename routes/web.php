@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 // 1. Landing Page
 Route::get('/', [DomainCheckController::class, 'index'])->name('home');
 
-// 2. Scanner Page
-Route::get('/scan', [DomainCheckController::class, 'scanner'])->name('scan');
+// 2. Scanner Page (Disatukan ke Beranda)
+Route::get('/scan', function (\Illuminate\Http\Request $request) {
+    return redirect()->route('home', $request->query());
+})->name('scan');
 
 // 3. Detailed Analysis Result Page
 Route::get('/result/{id}', [DomainCheckController::class, 'result'])->name('result');
